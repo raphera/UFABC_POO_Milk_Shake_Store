@@ -4,7 +4,7 @@ import com.ufabc.poo.domain.Compra;
 import com.ufabc.poo.domain.MilkShake;
 import com.ufabc.poo.domain.Remocao;
 import com.ufabc.poo.domain.Venda;
-import com.ufabc.poo.domain.interfaces.ITransacao;
+import com.ufabc.poo.domain.abstractions.ATransacao;
 import com.ufabc.poo.services.interfaces.IBancoDeMilkShakes;
 import com.ufabc.poo.services.interfaces.IEstoque;
 import com.ufabc.poo.services.interfaces.ITranscaoService;
@@ -32,7 +32,7 @@ public class TransacaoService implements ITranscaoService {
         return conn;
     }
 
-    private void insert(ITransacao transacao) {
+    private void insert(ATransacao transacao) {
         String sql = "INSERT INTO Transacoes (Nome, Tipo, Valor, Quantidade, Data) VALUES (?,?,?,?,?)";
         try {
             Connection con = connect();
@@ -58,7 +58,7 @@ public class TransacaoService implements ITranscaoService {
     }
 
     @Override
-    public boolean efetuaCompra(ITransacao compra) {
+    public boolean efetuaCompra(ATransacao compra) {
         try {
             estoque.AdicionaMP(compra.getNome(), compra.getQuantidade(), compra.getValor());
             insert(compra);
@@ -80,7 +80,7 @@ public class TransacaoService implements ITranscaoService {
     }
 
     @Override
-    public boolean efetuaVenda(ITransacao venda) {
+    public boolean efetuaVenda(ATransacao venda) {
         MilkShake MilkShake = bancoDeMilkShakes.getMilkShake(venda.getNome());
         /*
          * for (Map.Entry<UUID, Integer> entry : MilkShake.getIngredientes().entrySet())
@@ -98,9 +98,9 @@ public class TransacaoService implements ITranscaoService {
     }
 
     @Override
-    public ArrayList<ITransacao> getVendas(Timestamp date) {
+    public ArrayList<ATransacao> getVendas(Timestamp date) {
         String sql = "SELECT * FROM Transacoes WHERE Tipo = \"Venda\" AND DATE(data) <= DATE(?)";
-        ArrayList<ITransacao> retorno = new ArrayList<>();
+        ArrayList<ATransacao> retorno = new ArrayList<>();
         try {
             Connection con = connect();
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -122,9 +122,9 @@ public class TransacaoService implements ITranscaoService {
     }
 
     @Override
-    public ArrayList<ITransacao> getCompras(Timestamp date) {
+    public ArrayList<ATransacao> getCompras(Timestamp date) {
         String sql = "SELECT * FROM Transacoes WHERE Tipo = \"Compra\" AND DATE(data) = DATE(?)";
-        ArrayList<ITransacao> retorno = new ArrayList<>();
+        ArrayList<ATransacao> retorno = new ArrayList<>();
         try {
             Connection con = connect();
             PreparedStatement pstmt = con.prepareStatement(sql);

@@ -1,0 +1,82 @@
+package com.ufabc.poo.controllers;
+
+import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import com.ufabc.poo.App;
+
+public class MainController implements Initializable {
+
+    @FXML
+    private AnchorPane opacityPane, drawerPane;
+
+    @FXML
+    private Label drawerImage;
+
+    @FXML
+    private ImageView exit, menuIcon;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        exit.setOnMouseClicked(event -> {
+            System.exit(0);
+        });
+
+        opacityPane.setVisible(false);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), opacityPane);
+        fadeTransition.setFromValue(1);
+        fadeTransition.setToValue(0);
+        fadeTransition.play();
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5), drawerPane);
+        // translateTransition.setByX(-600);
+        translateTransition.setToX(-600);
+        translateTransition.play();
+
+        drawerImage.setOnMouseClicked(event -> {
+            opacityPane.setVisible(true);
+
+            FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(0.5), opacityPane);
+            fadeTransition1.setFromValue(0);
+            fadeTransition1.setToValue(0.15);
+            fadeTransition1.play();
+
+            TranslateTransition translateTransition1 = new TranslateTransition(Duration.seconds(0.5), drawerPane);
+            translateTransition1.setToX(0);
+            translateTransition1.play();
+            menuIcon.setImage(new Image(App.class.getResourceAsStream("imagens/menu_open.png")));
+
+        });
+
+        opacityPane.setOnMouseClicked(event -> {
+
+            FadeTransition fadeTransition1 = new FadeTransition(Duration.seconds(0.5), opacityPane);
+            fadeTransition1.setFromValue(0.15);
+            fadeTransition1.setToValue(0);
+            fadeTransition1.play();
+
+            fadeTransition1.setOnFinished(event1 -> {
+                opacityPane.setVisible(false);
+            });
+
+            TranslateTransition translateTransition1 = new TranslateTransition(Duration.seconds(0.5), drawerPane);
+            translateTransition1.setByX(-600);
+            translateTransition1.play();
+
+            menuIcon.setImage(new Image(App.class.getResourceAsStream("imagens/menu.png")));
+
+        });
+    }
+}

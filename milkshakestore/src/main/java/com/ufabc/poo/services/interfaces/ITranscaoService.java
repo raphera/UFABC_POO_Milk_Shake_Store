@@ -4,12 +4,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.ufabc.poo.domain.interfaces.ITransacao;
+import com.ufabc.poo.domain.abstractions.ATransacao;
 
 public interface ITranscaoService {
-    boolean efetuaCompra(ITransacao compra);
+    boolean efetuaCompra(ATransacao compra);
     boolean removeCompra(UUID Id);
-    boolean efetuaVenda(ITransacao venda);
-    ArrayList<ITransacao> getVendas(Timestamp date);
-    ArrayList<ITransacao> getCompras(Timestamp date);
+    boolean efetuaVenda(ATransacao venda);
+    ArrayList<ATransacao> getVendas(Timestamp date);
+    ArrayList<ATransacao> getCompras(Timestamp date);
 }

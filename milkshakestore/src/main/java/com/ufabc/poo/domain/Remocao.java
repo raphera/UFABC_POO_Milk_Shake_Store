@@ -1,8 +1,8 @@
 package com.ufabc.poo.domain;
 
-import com.ufabc.poo.domain.interfaces.ITransacao;
+import com.ufabc.poo.domain.abstractions.ATransacao;
 
-public class Remocao extends ITransacao {
+public class Remocao extends ATransacao {
     public Remocao(String nome, int quantidade, float valor) {
         super(nome, quantidade, valor, "");
     }

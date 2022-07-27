@@ -1,6 +1,6 @@
-package com.ufabc.poo.domain.interfaces;
+package com.ufabc.poo.domain.abstractions;
 
-public abstract class ITransacao {
+public abstract class ATransacao {
     private final String nome;
     private final int quantidade;
     private final float valor;
@@ -10,7 +10,7 @@ public abstract class ITransacao {
         return data;
     }
 
-    protected ITransacao(String nome, int quantidade, float valor, String data) {
+    protected ATransacao(String nome, int quantidade, float valor, String data) {
         this.nome = nome;
         this.quantidade = quantidade;
         this.valor = valor;
