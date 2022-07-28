@@ -3,13 +3,17 @@ package com.ufabc.poo.controllers;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -21,10 +25,16 @@ public class MainController implements Initializable {
     private AnchorPane opacityPane, drawerPane;
 
     @FXML
+    Pane mainPane;
+
+    @FXML
     private Label drawerImage;
 
     @FXML
     private ImageView exit, menuIcon;
+
+    @FXML
+    private Button ingredientesButton, milkShakesButton, relatoriosButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -78,5 +88,45 @@ public class MainController implements Initializable {
             menuIcon.setImage(new Image(App.class.getResourceAsStream("imagens/menu.png")));
 
         });
+
+        ingredientesButton.setOnMouseClicked(event -> {
+            Pane newLoadedPane;
+
+            try {
+                newLoadedPane = FXMLLoader.load(App.class.getResource("Ingredientes.fxml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(newLoadedPane);
+        });
+
+        milkShakesButton.setOnMouseClicked(event -> {
+            Pane newLoadedPane;
+
+            try {
+                newLoadedPane = FXMLLoader.load(App.class.getResource("MilkShakes.fxml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(newLoadedPane);
+        });
+
+        relatoriosButton.setOnMouseClicked(event -> {
+            Pane newLoadedPane;
+
+            try {
+                newLoadedPane = FXMLLoader.load(App.class.getResource("Relatorios.fxml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(newLoadedPane);
+        });
+
     }
 }
