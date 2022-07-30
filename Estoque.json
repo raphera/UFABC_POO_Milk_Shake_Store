@@ -1,0 +1,16 @@
+[
+    {
+        "id": "5d39043a-3a2b-4a6f-96bb-60f9369f3c4e",
+        "codigo": 0,
+        "nome": "Leite",
+        "quantidade": 10,
+        "pcusto": 4.5
+    },
+    {
+        "id": "8e664a19-654f-439a-a995-f83213f5048e",
+        "codigo": 0,
+        "nome": "Chocolate",
+        "quantidade": 15,
+        "pcusto": 10.58
+    }
+]

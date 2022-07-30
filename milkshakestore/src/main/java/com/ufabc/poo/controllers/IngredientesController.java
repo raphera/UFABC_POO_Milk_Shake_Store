@@ -3,7 +3,11 @@ package com.ufabc.poo.controllers;
 import com.ufabc.poo.App;
 import com.ufabc.poo.domain.Ingrediente;
 import com.ufabc.poo.helpers.DI;
+
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import com.ufabc.poo.services.interfaces.IBancoDeMilkShakes;
 import com.ufabc.poo.services.interfaces.IEstoque;
@@ -43,6 +48,9 @@ public class IngredientesController implements Initializable {
     @FXML
     TableColumn<Ingrediente, String> qtd;
 
+    @FXML
+    TextField searchField;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         nome.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNome()));
@@ -50,6 +58,27 @@ public class IngredientesController implements Initializable {
         qtd.setCellValueFactory(c -> new SimpleStringProperty(Integer.toString(c.getValue().getQuantidade())));
 
         tbData.getItems().addAll(estoque.getIngredientes());
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            search();
+        });
+    }
+
+    @FXML
+    private void search() {
+        String keyword = searchField.getText();
+        if (keyword.equals("")) {
+            tbData.getItems().clear();
+            tbData.getItems().addAll(estoque.getIngredientes());
+        } else {
+            ObservableList<Ingrediente> filteredData = FXCollections.observableArrayList();
+            for (Ingrediente ingrediente : estoque.getIngredientes()) {
+                if (ingrediente.getNome().toUpperCase().contains(keyword.toUpperCase()))
+                    filteredData.add(ingrediente);
+            }
+
+            tbData.setItems(filteredData);
+        }
     }
 
     public void reloadList() {
