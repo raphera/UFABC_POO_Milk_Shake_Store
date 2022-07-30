@@ -22,7 +22,7 @@ public class TransacaoService implements ITranscaoService {
     private final IEstoque estoque;
 
     private Connection connect() {
-        String url = "jdbc:sqlite:cafeteria.db";
+        String url = "jdbc:sqlite:milkshakestore.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -82,12 +82,6 @@ public class TransacaoService implements ITranscaoService {
     @Override
     public boolean efetuaVenda(ATransacao venda) {
         MilkShake MilkShake = bancoDeMilkShakes.getMilkShake(venda.getNome());
-        /*
-         * for (Map.Entry<UUID, Integer> entry : MilkShake.getIngredientes().entrySet())
-         * if (estoque.getMP(entry.getKey()).getQuantidade() < entry.getValue() *
-         * venda.getQuantidade())
-         * return false;
-         */
 
         for (Map.Entry<UUID, Integer> ingrediente : MilkShake.getIngredientes().entrySet()) {
             estoque.RemoveMP(estoque.getMP(ingrediente.getKey()).getNome(), ingrediente.getValue());

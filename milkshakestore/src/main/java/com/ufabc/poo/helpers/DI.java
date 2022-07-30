@@ -16,9 +16,16 @@ public class DI {
     static {
         injector = new EasyDI();
         injector.bindInterface(IBancoDeMilkShakes.class, BancoDeMilkShakes.class);
+        injector.markAsSingleton(BancoDeMilkShakes.class);
+
         injector.bindInterface(IPersistenceService.class, PersistenceService.class);
+        injector.markAsSingleton(PersistenceService.class);
+
         injector.bindInterface(IEstoque.class, Estoque.class);
+        injector.markAsSingleton(Estoque.class);
+
         injector.bindInterface(ITranscaoService.class, TransacaoService.class);
+        injector.markAsSingleton(TransacaoService.class);
     }
 
 }

@@ -1,8 +1,8 @@
 package com.ufabc.poo.services;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.json.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufabc.poo.domain.Ingrediente;
 import com.ufabc.poo.domain.MilkShake;
 import javafx.scene.control.Alert;
@@ -35,11 +35,10 @@ public class PersistenceService implements IPersistenceService {
     }
 
     private void setJSON(Object src, String arquivo) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-        String json = gson.toJson(src);
 
         try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(src);
             FileWriter writer = new FileWriter(arquivo);
             writer.write(json);
             writer.close();
@@ -54,29 +53,26 @@ public class PersistenceService implements IPersistenceService {
         }
     }
 
-    private ArrayList<MilkShake> getJsonMilkShakes(String arquivo)
-    {
-        Gson gson = new Gson();
+    private ArrayList<MilkShake> getJsonMilkShakes(String arquivo) {
+
         ArrayList<MilkShake> obj = null;
         try {
-            obj = gson.fromJson(new BufferedReader(new FileReader(arquivo)), new TypeToken<ArrayList<MilkShake>>() {}.getType());
-        }
-        finally {
-            if(obj == null)
+            ObjectMapper mapper = new ObjectMapper();
+            obj = mapper.readValue(new FileReader(arquivo), new TypeReference<ArrayList<MilkShake>>(){});
+        } finally {
+            if (obj == null)
                 return new ArrayList<MilkShake>();
             return obj;
         }
     }
 
-    private ArrayList<Ingrediente> getJsonEstoque(String arquivo)
-    {
-        Gson gson = new Gson();
+    private ArrayList<Ingrediente> getJsonEstoque(String arquivo) {
         ArrayList<Ingrediente> obj = null;
         try {
-            obj = gson.fromJson(new BufferedReader(new FileReader(arquivo)), new TypeToken<ArrayList<Ingrediente>>() {}.getType());
-        }
-        finally {
-            if(obj == null)
+            ObjectMapper mapper = new ObjectMapper();
+            obj = mapper.readValue(new FileReader(arquivo), new TypeReference<ArrayList<Ingrediente>>(){});
+        } finally {
+            if (obj == null)
                 return new ArrayList<Ingrediente>();
             return obj;
         }

@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.ufabc.poo.App;
+import com.ufabc.poo.helpers.DI;
 
 public class MainController implements Initializable {
 
@@ -93,13 +94,16 @@ public class MainController implements Initializable {
             Pane newLoadedPane;
 
             try {
-                newLoadedPane = FXMLLoader.load(App.class.getResource("Ingredientes.fxml"));
+                FXMLLoader IngredientesScreenLoader = new FXMLLoader();
+                IngredientesScreenLoader.setLocation(App.class.getResource("Ingredientes.fxml"));
+                IngredientesScreenLoader.setControllerFactory(DI.injector::getInstance);
+                newLoadedPane = IngredientesScreenLoader.load();
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
-            mainPane.getChildren().clear();
-            mainPane.getChildren().add(newLoadedPane);
+            // mainPane.getChildren().clear();
+            mainPane.getChildren().setAll(newLoadedPane);
         });
 
         milkShakesButton.setOnMouseClicked(event -> {

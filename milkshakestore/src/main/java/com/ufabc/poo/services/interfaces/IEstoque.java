@@ -16,5 +16,5 @@ public interface IEstoque {
 
     Ingrediente getMP(UUID Id);
 
-    ArrayList<Ingrediente> getMateriais();
+    ArrayList<Ingrediente> getIngredientes();
 }

@@ -12,60 +12,67 @@ import com.ufabc.poo.services.interfaces.IPersistenceService;
 
 @Singleton
 public class Estoque implements IEstoque {
-    private ArrayList<Ingrediente> Materiais;
+    private ArrayList<Ingrediente> Ingredientes;
     private IPersistenceService persistenceService;
+
     @Inject
     public Estoque(IPersistenceService persistenceService) {
         this.persistenceService = persistenceService;
-        //Carregar dados do json em Materiais
-        Materiais = persistenceService.getEstoque();
+        // Carregar dados do json em Ingredientes
+        Ingredientes = persistenceService.getEstoque();
     }
 
     /* Método remove Ingrediente do estoque */
     public void RemoveMP(UUID id_MP) {
-        Materiais.removeIf(x -> x.getId() == id_MP);
+        Ingredientes.removeIf(x -> x.getId().equals(id_MP));
 
-        //Remover do json
-        persistenceService.setEstoque(Materiais);
+        // Remover do json
+        persistenceService.setEstoque(Ingredientes);
     }
 
-    public void RemoveMP(String nome, int quantidade){
+    public void RemoveMP(String nome, int quantidade) {
         Ingrediente mp = getMP(nome);
         mp.aumentaQuantidade(quantidade * -1);
-        Materiais.removeIf(x -> x.getNome().equals(nome));
-        Materiais.add(mp);
+        Ingredientes.removeIf(x -> x.getNome().equals(nome));
+        Ingredientes.add(mp);
 
-        //Remover do json
-        persistenceService.setEstoque(Materiais);
+        // Remover do json
+        persistenceService.setEstoque(Ingredientes);
     }
 
-    /* Método adiciona matéria prima ao estoque, verifica se já existe alguma
-     * com mesmo nome, se já existir apenas atualiza os dados.*/
+    /*
+     * Método adiciona matéria prima ao estoque, verifica se já existe alguma
+     * com mesmo nome, se já existir apenas atualiza os dados.
+     */
     public void AdicionaMP(String nome, int quantidade, float preco) {
-        if (Materiais.stream().noneMatch(x -> x.getNome().equals(nome)))
-            Materiais.add(new Ingrediente(nome, quantidade, preco));
+        if (Ingredientes.stream().noneMatch(x -> x.getNome().equals(nome)))
+            Ingredientes.add(new Ingrediente(nome, quantidade, preco));
         else {
             Ingrediente mp = getMP(nome);
             mp.aumentaQuantidade(quantidade);
             mp.setPCusto(preco);
         }
 
-        persistenceService.setEstoque(Materiais);
+        persistenceService.setEstoque(Ingredientes);
     }
 
-    /* Método retorna Ingrediente de acordo com nome,
-     * caso não encontre retorna nulo. */
+    /*
+     * Método retorna Ingrediente de acordo com nome,
+     * caso não encontre retorna nulo.
+     */
     public Ingrediente getMP(String nome) {
-        return Materiais.stream().filter(x -> x.getNome().equals(nome)).findAny().orElse(null);
+        return Ingredientes.stream().filter(x -> x.getNome().equals(nome)).findAny().orElse(null);
     }
 
-    /* Método retorna Ingrediente de acordo com nome,
-     * caso não encontre retorna nulo. */
+    /*
+     * Método retorna Ingrediente de acordo com nome,
+     * caso não encontre retorna nulo.
+     */
     public Ingrediente getMP(UUID Id) {
-        return Materiais.stream().filter(x -> x.getId().equals(Id)).findAny().orElse(null);
+        return Ingredientes.stream().filter(x -> x.getId().equals(Id)).findAny().orElse(null);
     }
 
-    public ArrayList<Ingrediente> getMateriais() {
-        return Materiais;
+    public ArrayList<Ingrediente> getIngredientes() {
+        return Ingredientes;
     }
 }
