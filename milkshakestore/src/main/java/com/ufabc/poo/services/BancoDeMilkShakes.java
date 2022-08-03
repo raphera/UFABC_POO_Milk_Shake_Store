@@ -49,12 +49,12 @@ public class BancoDeMilkShakes implements IBancoDeMilkShakes {
 
     public float ObterPreco(UUID Id) {
         return getMilkShake(Id).getIngredientes().entrySet().stream()
-                .map(x -> estoque.getMP(x.getKey()).getPCusto() * x.getValue()).reduce((float) 0.0, (x, y) -> x + y);
+                .map(x -> estoque.getIng(x.getKey()).getPCusto() * x.getValue()).reduce((float) 0.0, (x, y) -> x + y);
     }
 
     public float ObterPreco(String NomeMilkShake) {
         return getMilkShake(NomeMilkShake).getIngredientes().entrySet().stream()
-                .map(x -> estoque.getMP(x.getKey()).getPCusto() * x.getValue()).reduce((float) 0.0, (x, y) -> x + y);
+                .map(x -> estoque.getIng(x.getKey()).getPCusto() * x.getValue()).reduce((float) 0.0, (x, y) -> x + y);
     }
 
     public void AdicionaMilkShake(MilkShake MilkShake) {
@@ -78,7 +78,7 @@ public class BancoDeMilkShakes implements IBancoDeMilkShakes {
                 .getIngredientes()
                 .entrySet()
                 .stream()
-                .map(x -> estoque.getMP(x.getKey()).getQuantidade() / x.getValue())
+                .map(x -> estoque.getIng(x.getKey()).getQuantidade() / x.getValue())
                 .min(Comparator.comparing(Float::valueOf))
                 .orElse(0);
     }

@@ -1,6 +1,7 @@
 package com.ufabc.poo.domain;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Ingrediente {
     private UUID id;
@@ -13,8 +14,9 @@ public class Ingrediente {
         id = UUID.randomUUID();
     }
 
-    public Ingrediente(String nome, int quantidade, float pCusto) {
+    public Ingrediente(long codigo, String nome, int quantidade, float pCusto) {
         this.id = UUID.randomUUID();
+        this.codigo = codigo;
         this.nome = nome;
         this.quantidade = quantidade;
         this.pCusto = pCusto;

@@ -1,6 +1,7 @@
 package com.ufabc.poo.services;
 
 import com.ufabc.poo.domain.Compra;
+import com.ufabc.poo.domain.Ingrediente;
 import com.ufabc.poo.domain.MilkShake;
 import com.ufabc.poo.domain.Remocao;
 import com.ufabc.poo.domain.Venda;
@@ -60,7 +61,7 @@ public class TransacaoService implements ITranscaoService {
     @Override
     public boolean efetuaCompra(ATransacao compra) {
         try {
-            estoque.AdicionaMP(compra.getNome(), compra.getQuantidade(), compra.getValor());
+            estoque.AdicionaIng(compra.getCodigo(), compra.getNome(), compra.getQuantidade(), compra.getValor());
             insert(compra);
             return true;
         } catch (Exception ex) {
@@ -70,9 +71,9 @@ public class TransacaoService implements ITranscaoService {
 
     public boolean removeCompra(UUID Id) {
         try {
-            estoque.RemoveMP(Id);
-            insert(new Remocao(estoque.getMP(Id).getNome(), estoque.getMP(Id).getQuantidade(),
-                    estoque.getMP(Id).getPCusto()));
+            Ingrediente tempIng = estoque.getIng(Id);
+            estoque.RemoveIng(Id);
+            insert(new Remocao(tempIng.getCodigo(), tempIng.getNome(), tempIng.getQuantidade(), tempIng.getPCusto()));
             return true;
         } catch (Exception ex) {
             return false;
@@ -84,7 +85,7 @@ public class TransacaoService implements ITranscaoService {
         MilkShake MilkShake = bancoDeMilkShakes.getMilkShake(venda.getNome());
 
         for (Map.Entry<UUID, Integer> ingrediente : MilkShake.getIngredientes().entrySet()) {
-            estoque.RemoveMP(estoque.getMP(ingrediente.getKey()).getNome(), ingrediente.getValue());
+            estoque.RemoveIng(estoque.getIng(ingrediente.getKey()).getNome(), ingrediente.getValue());
         }
 
         insert(venda);
@@ -104,6 +105,7 @@ public class TransacaoService implements ITranscaoService {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 retorno.add(new Venda(
+                        rs.getLong("Codigo"),
                         rs.getString("Nome"),
                         rs.getInt("Quantidade"),
                         rs.getInt("Valor"),
@@ -128,6 +130,7 @@ public class TransacaoService implements ITranscaoService {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 retorno.add(new Compra(
+                        rs.getLong("Codigo"),
                         rs.getString("Nome"),
                         rs.getInt("Quantidade"),
                         rs.getInt("Valor"),

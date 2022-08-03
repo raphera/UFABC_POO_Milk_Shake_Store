@@ -6,15 +6,17 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public interface IEstoque {
-    void RemoveMP(UUID id_MP);
+    void RemoveIng(UUID id_Ing);
 
-    void RemoveMP(String nome, int quantidade);
+    void RemoveIng(String nome, int quantidade);
 
-    void AdicionaMP(String nome, int quantidade, float preco);
+    void AdicionaIng(long codigo, String nome, int quantidade, float preco);
 
-    Ingrediente getMP(String nome);
+    void editIng(Ingrediente ingrediente);
 
-    Ingrediente getMP(UUID Id);
+    Ingrediente getIng(String nome);
+
+    Ingrediente getIng(UUID Id);
 
     ArrayList<Ingrediente> getIngredientes();
 }

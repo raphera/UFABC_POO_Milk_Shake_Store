@@ -1,15 +1,28 @@
 package com.ufabc.poo.controllers;
 
 import com.ufabc.poo.domain.Compra;
+import com.ufabc.poo.domain.Ingrediente;
+
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+
+import com.ufabc.poo.services.Estoque;
 import com.ufabc.poo.services.interfaces.ITranscaoService;
+import com.ufabc.poo.services.interfaces.IEstoque;
 
+import javax.inject.Inject;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class CompraIngredienteController {
+public class CompraIngredienteController implements Initializable {
     private final ITranscaoService transacao;
+    public static Ingrediente selectedIngrediente;
+
+    private final IEstoque estoque;
 
     @FXML
     private Button botaoCancelar;
@@ -18,28 +31,51 @@ public class CompraIngredienteController {
     private Button botaoAdicionar;
 
     @FXML
-    private TextField fieldNome;
+    private TextField fieldCodigo, fieldNome, fieldPreco, fieldQuantidade;
 
-    @FXML
-    private TextField fieldPreco;
-
-    @FXML
-    private TextField fieldQuantidade;
-
-    public CompraIngredienteController(ITranscaoService transacao) {
+    public CompraIngredienteController(ITranscaoService transacao, IEstoque estoque) {
         this.transacao = transacao;
+        this.estoque = estoque;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Garante que o código não tenha mais que 13 dígitos
+        fieldCodigo.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches("[0-9]{0,13}") ? c : null));
+
+        if (selectedIngrediente != null) {
+            fieldCodigo.setText(String.valueOf(selectedIngrediente.getCodigo()));
+            fieldNome.setText(selectedIngrediente.getNome());
+            fieldPreco.setText(String.valueOf(selectedIngrediente.getPCusto()));
+            fieldQuantidade.setText(String.valueOf(selectedIngrediente.getQuantidade()));
+
+            botaoAdicionar.setText("Salvar");
+        }
     }
 
     @FXML
-    private void botaoCancelar(){
+    private void botaoCancelar() {
         Stage stage = (Stage) botaoCancelar.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    private void botaoAdicionar(){
-        transacao.efetuaCompra(new Compra(fieldNome.getText(), Integer.parseInt(fieldQuantidade.getText()), Float.parseFloat(fieldPreco.getText())));
-        
+    private void botaoAdicionar() {
+
+        if (selectedIngrediente == null) {
+            transacao.efetuaCompra(new Compra(Long.parseLong(fieldCodigo.getText()), fieldNome.getText(),
+                    Integer.parseInt(fieldQuantidade.getText()),
+                    Float.parseFloat(fieldPreco.getText())));
+        } else {
+
+            selectedIngrediente.setCodigo(Long.parseLong(fieldCodigo.getText()));
+            selectedIngrediente.setNome(fieldNome.getText());
+            selectedIngrediente.setPCusto(Float.parseFloat(fieldPreco.getText()));
+            selectedIngrediente.setQuantidade(Integer.parseInt(fieldQuantidade.getText()));
+
+            estoque.editIng(selectedIngrediente);
+        }
+
         Stage stage = (Stage) botaoAdicionar.getScene().getWindow();
         stage.close();
     }

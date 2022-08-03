@@ -23,15 +23,15 @@ public class Estoque implements IEstoque {
     }
 
     /* Método remove Ingrediente do estoque */
-    public void RemoveMP(UUID id_MP) {
+    public void RemoveIng(UUID id_MP) {
         Ingredientes.removeIf(x -> x.getId().equals(id_MP));
 
         // Remover do json
         persistenceService.setEstoque(Ingredientes);
     }
 
-    public void RemoveMP(String nome, int quantidade) {
-        Ingrediente mp = getMP(nome);
+    public void RemoveIng(String nome, int quantidade) {
+        Ingrediente mp = getIng(nome);
         mp.aumentaQuantidade(quantidade * -1);
         Ingredientes.removeIf(x -> x.getNome().equals(nome));
         Ingredientes.add(mp);
@@ -44,14 +44,22 @@ public class Estoque implements IEstoque {
      * Método adiciona matéria prima ao estoque, verifica se já existe alguma
      * com mesmo nome, se já existir apenas atualiza os dados.
      */
-    public void AdicionaMP(String nome, int quantidade, float preco) {
+    public void AdicionaIng(long codigo, String nome, int quantidade, float preco) {
         if (Ingredientes.stream().noneMatch(x -> x.getNome().equals(nome)))
-            Ingredientes.add(new Ingrediente(nome, quantidade, preco));
+            Ingredientes.add(new Ingrediente(codigo, nome, quantidade, preco));
         else {
-            Ingrediente mp = getMP(nome);
+            Ingrediente mp = getIng(nome);
             mp.aumentaQuantidade(quantidade);
             mp.setPCusto(preco);
         }
+
+        persistenceService.setEstoque(Ingredientes);
+    }
+
+    /* Método edita Ingrediente do estoque */
+    public void editIng(Ingrediente ingrediente) {
+        Ingredientes.removeIf(x -> x.getId().equals(ingrediente.getId()));
+        Ingredientes.add(ingrediente);
 
         persistenceService.setEstoque(Ingredientes);
     }
@@ -60,7 +68,7 @@ public class Estoque implements IEstoque {
      * Método retorna Ingrediente de acordo com nome,
      * caso não encontre retorna nulo.
      */
-    public Ingrediente getMP(String nome) {
+    public Ingrediente getIng(String nome) {
         return Ingredientes.stream().filter(x -> x.getNome().equals(nome)).findAny().orElse(null);
     }
 
@@ -68,7 +76,7 @@ public class Estoque implements IEstoque {
      * Método retorna Ingrediente de acordo com nome,
      * caso não encontre retorna nulo.
      */
-    public Ingrediente getMP(UUID Id) {
+    public Ingrediente getIng(UUID Id) {
         return Ingredientes.stream().filter(x -> x.getId().equals(Id)).findAny().orElse(null);
     }
 

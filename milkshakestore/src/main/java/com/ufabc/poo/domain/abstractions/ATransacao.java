@@ -1,6 +1,7 @@
 package com.ufabc.poo.domain.abstractions;
 
 public abstract class ATransacao {
+    private final long codigo;
     private final String nome;
     private final int quantidade;
     private final float valor;
@@ -10,7 +11,8 @@ public abstract class ATransacao {
         return data;
     }
 
-    protected ATransacao(String nome, int quantidade, float valor, String data) {
+    protected ATransacao(long codigo, String nome, int quantidade, float valor, String data) {
+        this.codigo = codigo;
         this.nome = nome;
         this.quantidade = quantidade;
         this.valor = valor;
@@ -27,6 +29,10 @@ public abstract class ATransacao {
 
     public int getQuantidade() {
         return quantidade;
+    }
+
+    public long getCodigo() {
+        return codigo;
     }
 
     public abstract float getValorTotal();

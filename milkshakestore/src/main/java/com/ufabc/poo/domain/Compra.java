@@ -4,12 +4,12 @@ import com.ufabc.poo.domain.abstractions.ATransacao;
 
 public class Compra extends ATransacao {
 
-    public Compra(String nome, int quantidade, float valor) {
-        super(nome, quantidade, valor, "");
+    public Compra(long codigo, String nome, int quantidade, float valor) {
+        super(codigo, nome, quantidade, valor, "");
     }
 
-    public Compra(String nome, int quantidade, float valor, String data) {
-        super(nome, quantidade, valor, data);
+    public Compra(long codigo, String nome, int quantidade, float valor, String data) {
+        super(codigo, nome, quantidade, valor, data);
     }
 
     @Override
