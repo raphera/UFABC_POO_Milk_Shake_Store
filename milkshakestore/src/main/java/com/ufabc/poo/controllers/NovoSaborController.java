@@ -26,7 +26,7 @@ import java.util.UUID;
 public class NovoSaborController implements Initializable {
     private final IEstoque estoque;
     private final IBancoDeMilkShakes MilkShakes;
-    public static ObservableList<NovoMP> IngredientesNovaMilkShake = FXCollections.observableArrayList();
+    public static ObservableList<NovoIng> IngredientesNovaMilkShake = FXCollections.observableArrayList();
     
 
     //Injeta o estoque
@@ -38,13 +38,13 @@ public class NovoSaborController implements Initializable {
     }
 
     @FXML
-    private TableView<NovoMP> tbData;
+    private TableView<NovoIng> tbData;
 
     @FXML
-    public TableColumn<NovoMP, String> colIng;
+    public TableColumn<NovoIng, String> colIng;
 
     @FXML
-    public TableColumn<NovoMP, String> colQtd;
+    public TableColumn<NovoIng, String> colQtd;
 
     @FXML
     public TextField nomeMilkShake;
@@ -59,10 +59,10 @@ public class NovoSaborController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         // Coluna 1 - Nome do produto
-        colIng.setCellValueFactory(new PropertyValueFactory<>("produto"));
+        colIng.setCellValueFactory(new PropertyValueFactory<>("colIng"));
 
         // Coluna 2 - quantidade de produto
-        colQtd.setCellValueFactory(new PropertyValueFactory<>("qtd"));
+        colQtd.setCellValueFactory(new PropertyValueFactory<>("colQtd"));
 
         tbData.setItems(IngredientesNovaMilkShake);
         tbData.getColumns().clear();
@@ -78,7 +78,7 @@ public class NovoSaborController implements Initializable {
             MilkShake nova = new MilkShake(nomeMilkShake.getText());
 
             if (!IngredientesNovaMilkShake.isEmpty()) {
-                for (NovoMP x : IngredientesNovaMilkShake)
+                for (NovoIng x : IngredientesNovaMilkShake)
                     nova.addIngrediente(estoque.getIng(x.getProduto()).getId(), Integer.parseInt(x.getQtd()));
                 MilkShakes.AdicionaMilkShake(nova);
 
@@ -124,27 +124,27 @@ public class NovoSaborController implements Initializable {
         nomeMilkShake.setText(MilkShake.getSabor());
 
         for(Map.Entry<UUID, Integer> x : MilkShake.getIngredientes().entrySet()){
-            NovoMP mp = new NovoSaborController.NovoMP(estoque.getIng(x.getKey()).getNome(), Integer.toString(x.getValue()));
+            NovoIng mp = new NovoSaborController.NovoIng(estoque.getIng(x.getKey()).getNome(), Integer.toString(x.getValue()));
             IngredientesNovaMilkShake.add(mp);
         }
     }
 
-    public static class NovoMP {
+    public static class NovoIng {
 
-        private final SimpleStringProperty produto;
+        private final SimpleStringProperty ingrediente;
         private final SimpleStringProperty qtd;
 
-        public NovoMP(String produto, String qtd) {
-            this.produto = new SimpleStringProperty(produto);
+        public NovoIng(String produto, String qtd) {
+            this.ingrediente = new SimpleStringProperty(produto);
             this.qtd = new SimpleStringProperty(qtd);
         }
 
         public String getProduto() {
-            return produto.get();
+            return ingrediente.get();
         }
 
         public void setProduto(String nome) {
-            this.produto.set(nome);
+            this.ingrediente.set(nome);
         }
 
         public String getQtd() {

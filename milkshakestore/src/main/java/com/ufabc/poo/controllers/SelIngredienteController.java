@@ -9,11 +9,14 @@ import javax.inject.Inject;
 import com.ufabc.poo.domain.Ingrediente;
 import com.ufabc.poo.services.interfaces.IEstoque;
 
+import org.controlsfx.control.textfield.TextFields;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 
 public class SelIngredienteController implements Initializable {
@@ -43,14 +46,13 @@ public class SelIngredienteController implements Initializable {
             mps.add(x.getNome());
         }
 
-        //Textfields.bindAutoCompletion(fieldMP, mps).setMaxWidth(90);
+        TextFields.bindAutoCompletion(fieldMP, mps).setMaxWidth(90);
     }
 
     @FXML
     public void botaoAdicionar() {
         if (!fieldMP.getText().isEmpty() && !fielQtd.getText().isEmpty()) {
-            if(estoque.getIng(fieldMP.getText()) == null)
-            {
+            if (estoque.getIng(fieldMP.getText()) == null) {
                 Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
                 dialogoInfo.setTitle("Matéria prima");
                 dialogoInfo.setHeaderText("Matéria prima não existente");
@@ -58,10 +60,10 @@ public class SelIngredienteController implements Initializable {
                 dialogoInfo.showAndWait();
                 fieldMP.setText("");
                 fielQtd.setText("");
-            }
-            else {
+            } else {
                 NovoSaborController.IngredientesNovaMilkShake.removeIf(x -> x.getProduto().equals(fieldMP.getText()));
-                NovoSaborController.IngredientesNovaMilkShake.add(new NovoSaborController.NovoMP(fieldMP.getText(), fielQtd.getText()));
+                NovoSaborController.IngredientesNovaMilkShake
+                        .add(new NovoSaborController.NovoIng(fieldMP.getText(), fielQtd.getText()));
 
                 Stage stage = (Stage) botaoAdicionar.getScene().getWindow();
                 stage.close();

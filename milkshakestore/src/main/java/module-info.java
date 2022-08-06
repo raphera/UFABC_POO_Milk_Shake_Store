@@ -6,6 +6,7 @@ module com.ufabc.poo {
     requires java.sql;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
+    requires org.controlsfx.controls;
 
     opens com.ufabc.poo.controllers to javafx.fxml;
 
