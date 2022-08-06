@@ -43,7 +43,7 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="fieldNome" maxWidth="100.0" prefHeight="20.0" prefWidth="100.0" promptText="Café" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <TextField fx:id="fieldNome" maxWidth="100.0" prefHeight="20.0" prefWidth="100.0" promptText="Leite" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin></TextField>

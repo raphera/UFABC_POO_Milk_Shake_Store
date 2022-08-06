@@ -1,7 +1,6 @@
 package com.ufabc.poo.domain;
 
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Ingrediente {
     private UUID id;

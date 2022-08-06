@@ -19,8 +19,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import com.ufabc.poo.services.interfaces.IBancoDeMilkShakes;
 import com.ufabc.poo.services.interfaces.IEstoque;
 import com.ufabc.poo.services.interfaces.ITranscaoService;
@@ -112,6 +113,7 @@ public class IngredientesController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Comprar Produto");
             stage.setScene(new Scene(root1));
+            stage.initStyle(StageStyle.UTILITY);
             stage.setResizable(false);
             stage.show();
 
