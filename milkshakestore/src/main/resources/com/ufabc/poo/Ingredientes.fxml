@@ -92,7 +92,7 @@
             </StackPane>
             <TableView fx:id="tbData">
                <columns>
-                  <TableColumn fx:id="colCodigo" prefWidth="100.0" text="Id" />
+                  <TableColumn fx:id="colCodigo" prefWidth="100.0" text="Cod. Barras" />
                   <TableColumn fx:id="colNome" prefWidth="110.0" text="Nome" />
                   <TableColumn fx:id="colPreco" prefWidth="75.0" text="Preço" />
                   <TableColumn fx:id="colQtd" minWidth="-1.0" prefWidth="100.0" text="Quantidade" />

@@ -1,6 +1,8 @@
+
 module com.ufabc.poo {
     requires javafx.controls;
     requires javafx.fxml;
+    requires transitive javafx.base;
     requires eu.lestard.easydi;
     requires javax.inject;
     requires java.sql;
@@ -8,7 +10,7 @@ module com.ufabc.poo {
     requires com.fasterxml.jackson.databind;
     requires org.controlsfx.controls;
 
-    opens com.ufabc.poo.controllers to javafx.fxml;
+    opens com.ufabc.poo.controllers to javafx.fxml, javafx.base;
 
     exports com.ufabc.poo;
     exports com.ufabc.poo.services;

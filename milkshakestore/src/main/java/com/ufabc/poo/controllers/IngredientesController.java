@@ -65,7 +65,7 @@ public class IngredientesController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colCodigo.setCellValueFactory(c -> new SimpleStringProperty(Long.toString(c.getValue().getCodigo())));
         colNome.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNome()));
-        colPreco.setCellValueFactory(c -> new SimpleStringProperty(Float.toString(c.getValue().getPCusto())));
+        colPreco.setCellValueFactory(c -> new SimpleStringProperty(String.format("R$ %.2f", c.getValue().getPCusto())));
         colQtd.setCellValueFactory(c -> new SimpleStringProperty(Integer.toString(c.getValue().getQuantidade())));
 
         reloadList();

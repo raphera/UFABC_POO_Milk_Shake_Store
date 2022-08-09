@@ -5,6 +5,7 @@ import com.ufabc.poo.domain.Ingrediente;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -16,6 +17,9 @@ import com.ufabc.poo.services.interfaces.IEstoque;
 
 import javax.inject.Inject;
 import java.net.URL;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class CompraIngredienteController implements Initializable {
@@ -42,11 +46,13 @@ public class CompraIngredienteController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Garante que o código não tenha mais que 13 dígitos
         fieldCodigo.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches("[0-9]{0,13}") ? c : null));
+        fieldPreco.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches("[0-9,.]*") ? c : null));
 
         if (selectedIngrediente != null) {
             fieldCodigo.setText(String.valueOf(selectedIngrediente.getCodigo()));
             fieldNome.setText(selectedIngrediente.getNome());
-            fieldPreco.setText(String.valueOf(selectedIngrediente.getPCusto()));
+            fieldPreco.setText(NumberFormat.getNumberInstance(new Locale("pt", "BR"))
+                    .format(selectedIngrediente.getPCusto()).toString());
             fieldQuantidade.setText(String.valueOf(selectedIngrediente.getQuantidade()));
 
             botaoAdicionar.setText("Salvar");
@@ -70,7 +76,20 @@ public class CompraIngredienteController implements Initializable {
 
             selectedIngrediente.setCodigo(Long.parseLong(fieldCodigo.getText()));
             selectedIngrediente.setNome(fieldNome.getText());
-            selectedIngrediente.setPCusto(Float.parseFloat(fieldPreco.getText()));
+
+            try {
+                selectedIngrediente.setPCusto(NumberFormat.getNumberInstance(new Locale("pt", "BR"))
+                        .parse(fieldPreco.getText()).floatValue());
+            } catch (ParseException e) {
+                Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+                dialogoInfo.setTitle("Novo Ingrediente");
+                dialogoInfo.setHeaderText("Formato de preço inválido");
+                dialogoInfo.setContentText("O preço deve ser um número válido, com \",\" como separador de decimal.");
+                dialogoInfo.showAndWait();
+
+                e.printStackTrace();
+            }
+
             selectedIngrediente.setQuantidade(Integer.parseInt(fieldQuantidade.getText()));
 
             estoque.editIng(selectedIngrediente);

@@ -54,27 +54,42 @@ public class PersistenceService implements IPersistenceService {
     }
 
     private ArrayList<MilkShake> getJsonMilkShakes(String arquivo) {
-
         ArrayList<MilkShake> obj = null;
         try {
             ObjectMapper mapper = new ObjectMapper();
-            obj = mapper.readValue(new FileReader(arquivo), new TypeReference<ArrayList<MilkShake>>(){});
+            obj = mapper.readValue(new FileReader(arquivo), new TypeReference<ArrayList<MilkShake>>() {
+            });
+        } catch (Exception e) {
+            Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.setTitle("Erro Inesperado");
+            dialogoInfo.setHeaderText(null);
+            dialogoInfo.setContentText("Erro ao ler o arquivo");
+            dialogoInfo.showAndWait();
         } finally {
             if (obj == null)
-                return new ArrayList<MilkShake>();
-            return obj;
+                obj = new ArrayList<MilkShake>();
         }
+
+        return obj;
     }
 
     private ArrayList<Ingrediente> getJsonEstoque(String arquivo) {
         ArrayList<Ingrediente> obj = null;
         try {
             ObjectMapper mapper = new ObjectMapper();
-            obj = mapper.readValue(new FileReader(arquivo), new TypeReference<ArrayList<Ingrediente>>(){});
+            obj = mapper.readValue(new FileReader(arquivo), new TypeReference<ArrayList<Ingrediente>>() {
+            });
+        } catch (Exception e) {
+            Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.setTitle("Erro Inesperado");
+            dialogoInfo.setHeaderText(null);
+            dialogoInfo.setContentText("Erro ao ler o arquivo");
+            dialogoInfo.showAndWait();
         } finally {
             if (obj == null)
-                return new ArrayList<Ingrediente>();
-            return obj;
+                obj = new ArrayList<Ingrediente>();
         }
+
+        return obj;
     }
 }

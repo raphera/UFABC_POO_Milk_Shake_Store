@@ -46,6 +46,8 @@ public class SelIngredienteController implements Initializable {
             mps.add(x.getNome());
         }
 
+        fielQtd.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches("[0-9]{0,9}") ? c : null));
+
         TextFields.bindAutoCompletion(fieldMP, mps).setMaxWidth(90);
     }
 
@@ -61,8 +63,8 @@ public class SelIngredienteController implements Initializable {
                 fieldMP.setText("");
                 fielQtd.setText("");
             } else {
-                NovoSaborController.IngredientesNovaMilkShake.removeIf(x -> x.getProduto().equals(fieldMP.getText()));
-                NovoSaborController.IngredientesNovaMilkShake
+                NovoSaborController.IngredientesNovoMilkShake.removeIf(x -> x.getProduto().equals(fieldMP.getText()));
+                NovoSaborController.IngredientesNovoMilkShake
                         .add(new NovoSaborController.NovoIng(fieldMP.getText(), fielQtd.getText()));
 
                 Stage stage = (Stage) botaoAdicionar.getScene().getWindow();

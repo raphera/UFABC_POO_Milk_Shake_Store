@@ -8,48 +8,60 @@ public class MilkShake {
     private UUID id;
     private long codigo;
     private String sabor;
-    private Map<UUID, Integer> Ingredientes;
+    private Map<UUID, Integer> ingredientes;
+    private float preco;
 
-    public MilkShake(String sabor) {
-        Ingredientes = new HashMap<>();
-        this.id = UUID.randomUUID();
-        this.sabor = sabor;
-
-        // Iniciando código com 789* para indicar que produto foi registrado no Brasil!
-        this.codigo = 7890000000000L;
-        // TODO: Melhorar código para gerar código único para cada produto.
-        this.codigo = (long) (Math.random() * 1000000000);
+    public MilkShake() {
+        id = UUID.randomUUID();
+        ingredientes = new HashMap<>();
+        this.codigo = (long) (Math.random() * 1000000000000L);
     }
 
     public UUID getId() {
         return id;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public long getCodigo() {
         return codigo;
+    }
+
+    public void setCodigo(long codigo) {
+        this.codigo = codigo;
     }
 
     public String getSabor() {
         return sabor;
     }
 
+    public void setSabor(String sabor) {
+        this.sabor = sabor;
+    }
+
     public Map<UUID, Integer> getIngredientes() {
-        return Ingredientes;
+        return ingredientes;
     }
 
     public void setIngredientes(Map<UUID, Integer> ingredientes) {
-        Ingredientes = ingredientes;
+        this.ingredientes = ingredientes;
     }
 
     public void addIngrediente(UUID id, Integer quant) {
-        Ingredientes.put(id, quant);
+        ingredientes.put(id, quant);
     }
 
-    public void AdicionaMP(UUID id, int quantidade) {
-        Ingredientes.put(id, quantidade);
+    public void remIngrediente(UUID id) {
+        ingredientes.remove(id);
     }
 
-    public void RemoveMP(UUID id) {
-        Ingredientes.remove(id);
+    public float getPreco() {
+        return preco;
+    }
+
+    public void setPreco(float preco) {
+        this.preco = preco;
     }
 }
