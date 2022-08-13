@@ -14,7 +14,9 @@ public class MilkShake {
     public MilkShake() {
         id = UUID.randomUUID();
         ingredientes = new HashMap<>();
-        this.codigo = (long) (Math.random() * 1000000000000L);
+
+        // código de barras brasileiro inicia com 789.
+        this.codigo = 7890000000000L + (long)(Math.random() * 1000000000L);
     }
 
     public UUID getId() {

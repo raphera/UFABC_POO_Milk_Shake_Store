@@ -126,13 +126,16 @@ public class MainController implements Initializable {
             Pane newLoadedPane;
 
             try {
-                newLoadedPane = FXMLLoader.load(App.class.getResource("Relatorios.fxml"));
+                FXMLLoader IngredientesScreenLoader = new FXMLLoader();
+                IngredientesScreenLoader.setLocation(App.class.getResource("Relatorios.fxml"));
+                IngredientesScreenLoader.setControllerFactory(DI.injector::getInstance);
+                newLoadedPane = IngredientesScreenLoader.load();
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
-            mainPane.getChildren().clear();
-            mainPane.getChildren().add(newLoadedPane);
+            // mainPane.getChildren().clear();
+            mainPane.getChildren().setAll(newLoadedPane);
         });
 
     }

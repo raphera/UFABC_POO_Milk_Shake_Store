@@ -13,6 +13,8 @@ import com.ufabc.poo.services.interfaces.ITranscaoService;
 import javax.inject.Inject;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
@@ -34,18 +36,23 @@ public class TransacaoService implements ITranscaoService {
     }
 
     private void insert(ATransacao transacao) {
-        String sql = "INSERT INTO Transacoes (Nome, Tipo, Valor, Quantidade, Data) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO Transacoes (Codigo, Nome, Tipo, Valor, Custo, Quantidade, Data) VALUES (?,?,?,?,?,?,?)";
         try {
             Connection con = connect();
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, transacao.getNome());
-            pstmt.setString(2, transacao.getTipo());
-            pstmt.setFloat(3, transacao.getValorTotal());
-            pstmt.setInt(4, transacao.getQuantidade());
+
+            pstmt.setString(1, Long.toString(transacao.getCodigo()));
+            pstmt.setString(2, transacao.getNome());
+            pstmt.setString(3, transacao.getTipo());
+            pstmt.setFloat(4, transacao.getValorTotal());
+            pstmt.setFloat(5, transacao.getCustoTotal());
+            pstmt.setInt(6, transacao.getQuantidade());
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             String ts = sdf.format(timestamp);
-            pstmt.setString(5, ts);
+            pstmt.setString(7, ts);
+
             pstmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -80,12 +87,23 @@ public class TransacaoService implements ITranscaoService {
         }
     }
 
+    public boolean removeCompra(UUID Id, int quantidade) {
+        try {
+            Ingrediente tempIng = estoque.getIng(Id);
+            estoque.RemoveIng(estoque.getIng(Id), quantidade);
+            insert(new Remocao(tempIng.getCodigo(), tempIng.getNome(), quantidade, tempIng.getPCusto()));
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
     @Override
     public boolean efetuaVenda(ATransacao venda) {
         MilkShake MilkShake = bancoDeMilkShakes.getMilkShake(venda.getNome());
 
         for (Map.Entry<UUID, Integer> ingrediente : MilkShake.getIngredientes().entrySet()) {
-            estoque.RemoveIng(estoque.getIng(ingrediente.getKey()).getNome(), ingrediente.getValue());
+            estoque.RemoveIng(estoque.getIng(ingrediente.getKey()), ingrediente.getValue());
         }
 
         insert(venda);
@@ -93,22 +111,26 @@ public class TransacaoService implements ITranscaoService {
     }
 
     @Override
-    public ArrayList<ATransacao> getVendas(Timestamp date) {
-        String sql = "SELECT * FROM Transacoes WHERE Tipo = \"Venda\" AND DATE(data) <= DATE(?)";
+    public ArrayList<ATransacao> getVendas(LocalDate dataInicial, LocalDate dataFinal) {
+        String sql = "SELECT * FROM Transacoes WHERE Tipo = \"Venda\" AND DATE(data) BETWEEN DATE(?) AND DATE(?)";
         ArrayList<ATransacao> retorno = new ArrayList<>();
         try {
             Connection con = connect();
+
             PreparedStatement pstmt = con.prepareStatement(sql);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String ts = sdf.format(date);
-            pstmt.setString(1, ts);
+
+            pstmt.setString(1, dataInicial.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            pstmt.setString(2, dataFinal.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 retorno.add(new Venda(
                         rs.getLong("Codigo"),
                         rs.getString("Nome"),
                         rs.getInt("Quantidade"),
-                        rs.getInt("Valor"),
+                        rs.getFloat("Valor"),
+                        rs.getFloat("Custo"),
                         rs.getString("Data")));
             }
         } catch (SQLException e) {
@@ -118,22 +140,25 @@ public class TransacaoService implements ITranscaoService {
     }
 
     @Override
-    public ArrayList<ATransacao> getCompras(Timestamp date) {
-        String sql = "SELECT * FROM Transacoes WHERE Tipo = \"Compra\" AND DATE(data) = DATE(?)";
+    public ArrayList<ATransacao> getCompras(LocalDate dataInicial, LocalDate dataFinal) {
+        String sql = "SELECT * FROM Transacoes WHERE Tipo = \"Compra\" AND DATE(data) BETWEEN DATE(?) AND DATE(?)";
         ArrayList<ATransacao> retorno = new ArrayList<>();
         try {
             Connection con = connect();
+
             PreparedStatement pstmt = con.prepareStatement(sql);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String ts = sdf.format(date);
-            pstmt.setString(1, ts);
+
+            pstmt.setString(1, dataInicial.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            pstmt.setString(2, dataFinal.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 retorno.add(new Compra(
                         rs.getLong("Codigo"),
                         rs.getString("Nome"),
                         rs.getInt("Quantidade"),
-                        rs.getInt("Valor"),
+                        rs.getFloat("Valor"),
                         rs.getString("Data")));
             }
         } catch (SQLException e) {

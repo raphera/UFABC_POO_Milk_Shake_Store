@@ -30,11 +30,11 @@ public class Estoque implements IEstoque {
         persistenceService.setEstoque(Ingredientes);
     }
 
-    public void RemoveIng(String nome, int quantidade) {
-        Ingrediente mp = getIng(nome);
-        mp.aumentaQuantidade(quantidade * -1);
-        Ingredientes.removeIf(x -> x.getNome().equals(nome));
-        Ingredientes.add(mp);
+    public void RemoveIng(Ingrediente ingrediente, int quantidade) {
+        ingrediente.aumentaQuantidade(quantidade * -1);
+
+        Ingredientes.removeIf(x -> x.getId().equals(ingrediente.getId()));
+        Ingredientes.add(ingrediente);
 
         // Remover do json
         persistenceService.setEstoque(Ingredientes);
@@ -45,10 +45,10 @@ public class Estoque implements IEstoque {
      * com mesmo nome, se já existir apenas atualiza os dados.
      */
     public void AdicionaIng(long codigo, String nome, int quantidade, float preco) {
-        if (Ingredientes.stream().noneMatch(x -> x.getNome().equals(nome)))
+        if (Ingredientes.stream().noneMatch(x -> x.getCodigo() == codigo))
             Ingredientes.add(new Ingrediente(codigo, nome, quantidade, preco));
         else {
-            Ingrediente mp = getIng(nome);
+            Ingrediente mp = getIng(codigo);
             mp.aumentaQuantidade(quantidade);
             mp.setPCusto(preco);
         }
@@ -73,11 +73,19 @@ public class Estoque implements IEstoque {
     }
 
     /*
-     * Método retorna Ingrediente de acordo com nome,
+     * Método retorna Ingrediente de acordo com Id,
      * caso não encontre retorna nulo.
      */
     public Ingrediente getIng(UUID Id) {
         return Ingredientes.stream().filter(x -> x.getId().equals(Id)).findAny().orElse(null);
+    }
+
+    /*
+     * Método retorna Ingrediente de acordo com o código de barras,
+     * caso não encontre retorna nulo.
+     */
+    public Ingrediente getIng(long codigo) {
+        return Ingredientes.stream().filter(x -> x.getCodigo() == codigo).findAny().orElse(null);
     }
 
     public ArrayList<Ingrediente> getIngredientes() {

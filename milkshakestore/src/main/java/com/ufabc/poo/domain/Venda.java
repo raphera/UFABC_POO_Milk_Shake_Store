@@ -3,17 +3,22 @@ package com.ufabc.poo.domain;
 import com.ufabc.poo.domain.abstractions.ATransacao;
 
 public class Venda extends ATransacao {
-    public Venda(long codigo, String nome, int quantidade, float valor) {
-        super(codigo, nome, quantidade, valor, "");
+    public Venda(long codigo, String nome, int quantidade, float valor, float custo) {
+        super(codigo, nome, quantidade, valor, custo, "");
     }
 
-    public Venda(long codigo, String nome, int quantidade, float valor, String data) {
-        super(codigo, nome, quantidade, valor, data);
+    public Venda(long codigo, String nome, int quantidade, float valor, float custo, String data) {
+        super(codigo, nome, quantidade, valor, custo, data);
     }
 
     @Override
     public float getValorTotal() {
         return getQuantidade()*getValor();
+    }
+
+    @Override
+    public float getCustoTotal() {
+        return getQuantidade()*getCusto();
     }
     
     @Override

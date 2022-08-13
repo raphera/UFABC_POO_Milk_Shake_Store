@@ -49,6 +49,7 @@ public class CompraIngredienteController implements Initializable {
         fieldPreco.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches("[0-9,.]*") ? c : null));
 
         if (selectedIngrediente != null) {
+            fieldCodigo.setDisable(true);
             fieldCodigo.setText(String.valueOf(selectedIngrediente.getCodigo()));
             fieldNome.setText(selectedIngrediente.getNome());
             fieldPreco.setText(NumberFormat.getNumberInstance(new Locale("pt", "BR"))
@@ -67,35 +68,54 @@ public class CompraIngredienteController implements Initializable {
 
     @FXML
     private void botaoAdicionar() {
+        float valor;
+        try {
+            valor = NumberFormat.getNumberInstance(new Locale("pt", "BR")).parse(fieldPreco.getText()).floatValue();
 
-        if (selectedIngrediente == null) {
-            transacao.efetuaCompra(new Compra(Long.parseLong(fieldCodigo.getText()), fieldNome.getText(),
-                    Integer.parseInt(fieldQuantidade.getText()),
-                    Float.parseFloat(fieldPreco.getText())));
-        } else {
+            if (selectedIngrediente == null) {
 
-            selectedIngrediente.setCodigo(Long.parseLong(fieldCodigo.getText()));
-            selectedIngrediente.setNome(fieldNome.getText());
+                transacao.efetuaCompra(
+                        new Compra(
+                                Long.parseLong(fieldCodigo.getText()),
+                                fieldNome.getText(),
+                                Integer.parseInt(fieldQuantidade.getText()),
+                                valor));
+            } else {
+                selectedIngrediente.setCodigo(Long.parseLong(fieldCodigo.getText()));
+                selectedIngrediente.setNome(fieldNome.getText());
 
-            try {
-                selectedIngrediente.setPCusto(NumberFormat.getNumberInstance(new Locale("pt", "BR"))
-                        .parse(fieldPreco.getText()).floatValue());
-            } catch (ParseException e) {
-                Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
-                dialogoInfo.setTitle("Novo Ingrediente");
-                dialogoInfo.setHeaderText("Formato de preço inválido");
-                dialogoInfo.setContentText("O preço deve ser um número válido, com \",\" como separador de decimal.");
-                dialogoInfo.showAndWait();
+                if (Integer.parseInt(fieldQuantidade.getText()) < selectedIngrediente.getQuantidade()) {
+                    // Caso haja ocorra uma remoção de ingrediente
+                    transacao.removeCompra(
+                            selectedIngrediente.getId(),
+                            selectedIngrediente.getQuantidade() - Integer.parseInt(fieldQuantidade.getText()));
 
-                e.printStackTrace();
+                    selectedIngrediente.setPCusto(valor);
+                } else if (Integer.parseInt(fieldQuantidade.getText()) > selectedIngrediente.getQuantidade()) {
+                    // Caso haja ocorra uma adição de ingrediente
+                    transacao.efetuaCompra(
+                            new Compra(
+                                    Long.parseLong(fieldCodigo.getText()),
+                                    fieldNome.getText(),
+                                    Integer.parseInt(fieldQuantidade.getText()) - selectedIngrediente.getQuantidade(),
+                                    valor));
+                } else {
+                    // Caso não haja adição nem remoção de ingrediente
+                    selectedIngrediente.setPCusto(valor);
+                    selectedIngrediente.setQuantidade(Integer.parseInt(fieldQuantidade.getText()));
+                }
+
+                estoque.editIng(selectedIngrediente);
             }
-
-            selectedIngrediente.setQuantidade(Integer.parseInt(fieldQuantidade.getText()));
-
-            estoque.editIng(selectedIngrediente);
+        } catch (ParseException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Erro ao adicionar ingrediente");
+            alert.setContentText("O valor do ingrediente não pode ser convertido para float");
+            alert.showAndWait();
+        } finally {
+            Stage stage = (Stage) botaoAdicionar.getScene().getWindow();
+            stage.close();
         }
-
-        Stage stage = (Stage) botaoAdicionar.getScene().getWindow();
-        stage.close();
     }
 }

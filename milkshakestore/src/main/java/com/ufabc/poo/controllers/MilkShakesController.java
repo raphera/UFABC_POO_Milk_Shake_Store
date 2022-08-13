@@ -19,21 +19,26 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import com.ufabc.poo.services.interfaces.IBancoDeMilkShakes;
+import com.ufabc.poo.services.interfaces.IEstoque;
 import com.ufabc.poo.services.interfaces.ITranscaoService;
 
 import javax.inject.Inject;
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 public class MilkShakesController implements Initializable {
+    private final IEstoque estoque;
     private final ITranscaoService transacao;
     private final IBancoDeMilkShakes milkshakes;
 
     // Injeta o estoque
     @Inject
-    public MilkShakesController(IBancoDeMilkShakes milkshakes, ITranscaoService transacao) {
+    public MilkShakesController(IBancoDeMilkShakes milkshakes, ITranscaoService transacao, IEstoque estoque) {
         this.milkshakes = milkshakes;
         this.transacao = transacao;
+        this.estoque = estoque;
     }
 
     @FXML
@@ -81,10 +86,19 @@ public class MilkShakesController implements Initializable {
             MilkShake vendaMilkShake = tbData.getSelectionModel().getSelectedItem();
             if (vendaMilkShake != null) {
                 if (milkshakes.obterDisp(vendaMilkShake.getId()) > 0) {
-                    transacao.efetuaVenda(
-                            new Venda(vendaMilkShake.getCodigo(), vendaMilkShake.getSabor(), 1,
-                                    vendaMilkShake.getPreco()));
+                    float precoCusto = 0;
 
+                    for (Map.Entry<UUID, Integer> ingrediente : vendaMilkShake.getIngredientes().entrySet()) {
+                        precoCusto += estoque.getIng(ingrediente.getKey()).getPCusto() * ingrediente.getValue();
+                    }
+
+                    transacao.efetuaVenda(
+                            new Venda(
+                                    vendaMilkShake.getCodigo(),
+                                    vendaMilkShake.getSabor(),
+                                    1,
+                                    vendaMilkShake.getPreco(),
+                                    precoCusto));
                     reloadList();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);

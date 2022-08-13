@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface IEstoque {
     void RemoveIng(UUID id_Ing);
 
-    void RemoveIng(String nome, int quantidade);
+    void RemoveIng(Ingrediente nome, int quantidade);
 
     void AdicionaIng(long codigo, String nome, int quantidade, float preco);
 
