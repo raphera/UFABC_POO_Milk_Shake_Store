@@ -2,6 +2,7 @@ package com.ufabc.poo.controllers;
 
 import com.ufabc.poo.App;
 import com.ufabc.poo.domain.MilkShake;
+import com.ufabc.poo.domain.Venda;
 import com.ufabc.poo.helpers.DI;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -18,18 +19,21 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import com.ufabc.poo.services.interfaces.IBancoDeMilkShakes;
+import com.ufabc.poo.services.interfaces.ITranscaoService;
 
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MilkShakesController implements Initializable {
+    private final ITranscaoService transacao;
     private final IBancoDeMilkShakes milkshakes;
 
     // Injeta o estoque
     @Inject
-    public MilkShakesController(IBancoDeMilkShakes milkshakes) {
+    public MilkShakesController(IBancoDeMilkShakes milkshakes, ITranscaoService transacao) {
         this.milkshakes = milkshakes;
+        this.transacao = transacao;
     }
 
     @FXML
@@ -39,7 +43,7 @@ public class MilkShakesController implements Initializable {
     public TableColumn<MilkShake, String> colNome, colCodigo, colPreco, colDisp;
 
     @FXML
-    private Button editBtn, removeBtn;
+    private Button editBtn, removeBtn, regVendaBtn;
 
     @FXML
     private TextField searchField;
@@ -62,12 +66,50 @@ public class MilkShakesController implements Initializable {
 
         editBtn.disableProperty().bind(tbData.getSelectionModel().selectedItemProperty().isNull());
         removeBtn.disableProperty().bind(tbData.getSelectionModel().selectedItemProperty().isNull());
+        regVendaBtn.disableProperty().bind(tbData.getSelectionModel().selectedItemProperty().isNull());
     }
 
     public void reloadList() {
         tbData.getItems().clear();
         tbData.getItems().addAll(milkshakes.getMilkShakes());
         tbData.getSortOrder().add(colNome);
+    }
+
+    @FXML
+    public void regVenda() {
+        try {
+            MilkShake vendaMilkShake = tbData.getSelectionModel().getSelectedItem();
+            if (vendaMilkShake != null) {
+                if (milkshakes.obterDisp(vendaMilkShake.getId()) > 0) {
+                    transacao.efetuaVenda(
+                            new Venda(vendaMilkShake.getCodigo(), vendaMilkShake.getSabor(), 1,
+                                    vendaMilkShake.getPreco()));
+
+                    reloadList();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Erro");
+                    alert.setHeaderText(
+                            "Esse sabor não está disponível mais disponível.\nNão há ingredientes suficientes no estoque.");
+                    alert.showAndWait();
+                }
+
+            } else {
+                Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+                dialogoInfo.setTitle("Registrar Venda");
+                dialogoInfo.setHeaderText("Nenhum sabor de milkshake selecionado.");
+                dialogoInfo.setContentText("Você deve selecionar um sabor para registrar a venda.");
+                dialogoInfo.showAndWait();
+            }
+
+        } catch (Exception e) {
+            Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.setTitle("Erro Inesperado");
+            dialogoInfo.setHeaderText(null);
+            dialogoInfo.setContentText(e.getMessage());
+            dialogoInfo.showAndWait();
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -117,7 +159,7 @@ public class MilkShakesController implements Initializable {
             } else {
                 Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
                 dialogoInfo.setTitle("Editar sabor");
-                dialogoInfo.setHeaderText("Nenhum sabor selecionada");
+                dialogoInfo.setHeaderText("Nenhum sabor selecionado");
                 dialogoInfo.setContentText("Você deve selecionar um sabor para poder\neditar.");
                 dialogoInfo.showAndWait();
             }
@@ -140,7 +182,7 @@ public class MilkShakesController implements Initializable {
         } else {
             Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
             dialogoInfo.setTitle("Editar MilkShake");
-            dialogoInfo.setHeaderText("Nenhuma MilkShake selecionada");
+            dialogoInfo.setHeaderText("Nenhuma MilkShake selecionado");
             dialogoInfo.setContentText("Você deve selecionar uma MilkShake para poder\nremover.");
             dialogoInfo.showAndWait();
         }
