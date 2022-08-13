@@ -112,7 +112,6 @@ public class NovoSaborController implements Initializable {
             if (!IngredientesNovoMilkShake.isEmpty()) {
                 for (NovoIng x : IngredientesNovoMilkShake)
                     milkshake.addIngrediente(estoque.getIng(x.getProduto()).getId(), Integer.parseInt(x.getQtd()));
-                MilkShakes.AdicionaMilkShake(milkshake);
             }
 
             try {
@@ -128,9 +127,10 @@ public class NovoSaborController implements Initializable {
                 e.printStackTrace();
             }
 
+            MilkShakes.AdicionaMilkShake(milkshake);
+
             Stage stage = (Stage) botaoCriarMilkShake.getScene().getWindow();
             stage.close();
-
         }
     }
 
