@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class CompraIngredienteController implements Initializable {
     private final ITranscaoService transacao;
@@ -106,6 +107,7 @@ public class CompraIngredienteController implements Initializable {
             }
         } catch (ParseException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initStyle(StageStyle.UTILITY);
             alert.setTitle("Erro");
             alert.setHeaderText("Erro ao adicionar ingrediente");
             alert.setContentText("O valor do ingrediente não pode ser convertido para float");

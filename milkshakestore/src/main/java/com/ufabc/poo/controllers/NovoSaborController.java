@@ -16,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import com.ufabc.poo.services.interfaces.IBancoDeMilkShakes;
 import com.ufabc.poo.services.interfaces.IEstoque;
 
@@ -110,6 +112,7 @@ public class NovoSaborController implements Initializable {
                         .floatValue());
             } catch (ParseException e) {
                 Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+                dialogoInfo.initStyle(StageStyle.UTILITY);
                 dialogoInfo.setTitle("Novo Ingrediente");
                 dialogoInfo.setHeaderText("Formato de preço inválido");
                 dialogoInfo.setContentText("O preço deve ser um número válido, com \",\" como separador de decimal.");
@@ -141,11 +144,13 @@ public class NovoSaborController implements Initializable {
             stage.setTitle("Selecionar Ingrediente");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
             stage.show();
         } catch (Exception e) {
             Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.initStyle(StageStyle.UTILITY);
             dialogoInfo.setTitle("Erro Inesperado");
-            dialogoInfo.setHeaderText(null);
+            dialogoInfo.setHeaderText("Erro ao abrir tela de seleção de ingrediente");
             dialogoInfo.setContentText(e.getMessage());
             dialogoInfo.showAndWait();
             e.printStackTrace();

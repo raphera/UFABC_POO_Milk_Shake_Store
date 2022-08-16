@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class SelIngredienteController implements Initializable {
     private final IEstoque estoque;
@@ -56,6 +57,7 @@ public class SelIngredienteController implements Initializable {
         if (!fieldMP.getText().isEmpty() && !fielQtd.getText().isEmpty()) {
             if (estoque.getIng(fieldMP.getText()) == null) {
                 Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+                dialogoInfo.initStyle(StageStyle.UTILITY);
                 dialogoInfo.setTitle("Matéria prima");
                 dialogoInfo.setHeaderText("Matéria prima não existente");
                 dialogoInfo.setContentText("Favor realizar a compra da matéria prima antes\nde adicionar a receita.");

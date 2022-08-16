@@ -102,8 +102,8 @@ public class IngredientesController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Comprar Produto");
             stage.setScene(new Scene(root1));
-            stage.initStyle(StageStyle.UTILITY);
             stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
             stage.show();
 
             stage.setOnHiding(event -> {
@@ -112,8 +112,9 @@ public class IngredientesController implements Initializable {
 
         } catch (Exception e) {
             Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.initStyle(StageStyle.UTILITY);
             dialogoInfo.setTitle("Erro Inesperado");
-            dialogoInfo.setHeaderText(null);
+            dialogoInfo.setHeaderText("Ocorreu um erro ao abrir a janela de compra de ingrediente");
             dialogoInfo.setContentText(e.getMessage());
             dialogoInfo.showAndWait();
             e.printStackTrace();
@@ -127,6 +128,7 @@ public class IngredientesController implements Initializable {
             reloadList();
         } else {
             Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+            dialogoInfo.initStyle(StageStyle.UTILITY);
             dialogoInfo.setTitle("Remover Produto");
             dialogoInfo.setHeaderText("Nenhum produto selecionado");
             dialogoInfo.setContentText("Você deve selecionar um produto para poder\nremover.");
@@ -145,6 +147,7 @@ public class IngredientesController implements Initializable {
             stage.setTitle("Comprar Produto");
             stage.setScene(new Scene(root1));
             stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
             stage.show();
 
             stage.setOnHiding(event -> {
@@ -153,8 +156,9 @@ public class IngredientesController implements Initializable {
 
         } catch (Exception e) {
             Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.initStyle(StageStyle.UTILITY);
             dialogoInfo.setTitle("Erro Inesperado");
-            dialogoInfo.setHeaderText(null);
+            dialogoInfo.setHeaderText("Ocorreu um erro ao abrir a janela de compra de ingrediente");
             dialogoInfo.setContentText(e.getMessage());
             dialogoInfo.showAndWait();
             e.printStackTrace();

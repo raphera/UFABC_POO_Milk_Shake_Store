@@ -18,6 +18,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import com.ufabc.poo.services.interfaces.IBancoDeMilkShakes;
 import com.ufabc.poo.services.interfaces.IEstoque;
 import com.ufabc.poo.services.interfaces.ITranscaoService;
@@ -101,6 +103,7 @@ public class MilkShakesController implements Initializable {
                     reloadList();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.initStyle(StageStyle.UTILITY);
                     alert.setTitle("Erro");
                     alert.setHeaderText(
                             "Esse sabor não está disponível mais disponível.\nNão há ingredientes suficientes no estoque.");
@@ -109,6 +112,7 @@ public class MilkShakesController implements Initializable {
 
             } else {
                 Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+                dialogoInfo.initStyle(StageStyle.UTILITY);
                 dialogoInfo.setTitle("Registrar Venda");
                 dialogoInfo.setHeaderText("Nenhum sabor de milkshake selecionado.");
                 dialogoInfo.setContentText("Você deve selecionar um sabor para registrar a venda.");
@@ -117,8 +121,9 @@ public class MilkShakesController implements Initializable {
 
         } catch (Exception e) {
             Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.initStyle(StageStyle.UTILITY);
             dialogoInfo.setTitle("Erro Inesperado");
-            dialogoInfo.setHeaderText(null);
+            dialogoInfo.setHeaderText("Ocorreu um erro ao abrir a tela de registro de venda.");
             dialogoInfo.setContentText(e.getMessage());
             dialogoInfo.showAndWait();
             e.printStackTrace();
@@ -136,6 +141,7 @@ public class MilkShakesController implements Initializable {
             stage.setTitle("Criar sabor");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
             stage.show();
 
             stage.setOnHiding(event -> {
@@ -144,8 +150,9 @@ public class MilkShakesController implements Initializable {
 
         } catch (Exception e) {
             Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.initStyle(StageStyle.UTILITY);
             dialogoInfo.setTitle("Erro Inesperado");
-            dialogoInfo.setHeaderText(null);
+            dialogoInfo.setHeaderText("Ocorreu um erro ao abrir a tela de criação de sabor.");
             dialogoInfo.setContentText(e.getMessage());
             dialogoInfo.showAndWait();
             e.printStackTrace();
@@ -164,6 +171,7 @@ public class MilkShakesController implements Initializable {
                 stage.setTitle("Editar sabor");
                 stage.setScene(new Scene(root));
                 stage.setResizable(false);
+                stage.initStyle(StageStyle.UTILITY);
                 stage.show();
 
                 stage.setOnHiding(event -> {
@@ -171,6 +179,7 @@ public class MilkShakesController implements Initializable {
                 });
             } else {
                 Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+                dialogoInfo.initStyle(StageStyle.UTILITY);
                 dialogoInfo.setTitle("Editar sabor");
                 dialogoInfo.setHeaderText("Nenhum sabor selecionado");
                 dialogoInfo.setContentText("Você deve selecionar um sabor para poder\neditar.");
@@ -179,8 +188,9 @@ public class MilkShakesController implements Initializable {
 
         } catch (Exception e) {
             Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.initStyle(StageStyle.UTILITY);
             dialogoInfo.setTitle("Erro Inesperado");
-            dialogoInfo.setHeaderText(null);
+            dialogoInfo.setHeaderText("Ocorreu um erro ao abrir a tela de edição de milkshake.");
             dialogoInfo.setContentText(e.getMessage());
             dialogoInfo.showAndWait();
             e.printStackTrace();
@@ -194,6 +204,7 @@ public class MilkShakesController implements Initializable {
             reloadList();
         } else {
             Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+            dialogoInfo.initStyle(StageStyle.UTILITY);
             dialogoInfo.setTitle("Editar MilkShake");
             dialogoInfo.setHeaderText("Nenhuma MilkShake selecionado");
             dialogoInfo.setContentText("Você deve selecionar uma MilkShake para poder\nremover.");

@@ -10,6 +10,9 @@ import com.ufabc.poo.services.interfaces.IBancoDeMilkShakes;
 import com.ufabc.poo.services.interfaces.IEstoque;
 import com.ufabc.poo.services.interfaces.ITranscaoService;
 
+import javafx.scene.control.Alert;
+import javafx.stage.StageStyle;
+
 import javax.inject.Inject;
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -29,8 +32,27 @@ public class TransacaoService implements ITranscaoService {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            String sql = """
+                    CREATE TABLE IF NOT EXISTS Transacoes (
+                        Codigo text,
+                        Nome text,
+                        Tipo text,
+                        Valor real,
+                        Custo real,
+                        Quantidade int,
+                        Data text
+                    )
+                    """;
+
+            stmt.executeUpdate(sql);
+            stmt.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.initStyle(StageStyle.UTILITY);
+            dialogoInfo.setTitle("Aviso");
+            dialogoInfo.setHeaderText("Não foi possível abrir o banco de transações.");
+            dialogoInfo.showAndWait();
         }
         return conn;
     }
