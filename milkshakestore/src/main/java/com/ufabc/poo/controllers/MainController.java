@@ -52,7 +52,6 @@ public class MainController implements Initializable {
         fadeTransition.play();
 
         TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5), drawerPane);
-        // translateTransition.setByX(-600);
         translateTransition.setToX(-600);
         translateTransition.play();
 
@@ -91,52 +90,32 @@ public class MainController implements Initializable {
         });
 
         ingredientesButton.setOnMouseClicked(event -> {
-            Pane newLoadedPane;
-
-            try {
-                FXMLLoader IngredientesScreenLoader = new FXMLLoader();
-                IngredientesScreenLoader.setLocation(App.class.getResource("Ingredientes.fxml"));
-                IngredientesScreenLoader.setControllerFactory(DI.injector::getInstance);
-                newLoadedPane = IngredientesScreenLoader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-            // mainPane.getChildren().clear();
-            mainPane.getChildren().setAll(newLoadedPane);
+            loadFXMLScreen("Ingredientes");
         });
 
         milkShakesButton.setOnMouseClicked(event -> {
-            Pane newLoadedPane;
-
-            try {
-                FXMLLoader IngredientesScreenLoader = new FXMLLoader();
-                IngredientesScreenLoader.setLocation(App.class.getResource("MilkShakes.fxml"));
-                IngredientesScreenLoader.setControllerFactory(DI.injector::getInstance);
-                newLoadedPane = IngredientesScreenLoader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-            // mainPane.getChildren().clear();
-            mainPane.getChildren().setAll(newLoadedPane);
+            loadFXMLScreen("MilkShakes");
         });
 
         relatoriosButton.setOnMouseClicked(event -> {
-            Pane newLoadedPane;
-
-            try {
-                FXMLLoader IngredientesScreenLoader = new FXMLLoader();
-                IngredientesScreenLoader.setLocation(App.class.getResource("Relatorios.fxml"));
-                IngredientesScreenLoader.setControllerFactory(DI.injector::getInstance);
-                newLoadedPane = IngredientesScreenLoader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-            // mainPane.getChildren().clear();
-            mainPane.getChildren().setAll(newLoadedPane);
+            loadFXMLScreen("Relatorios");
         });
 
+        loadFXMLScreen("Ingredientes");
+    }
+
+    private void loadFXMLScreen(String name) {
+        Pane newLoadedPane;
+
+        try {
+            FXMLLoader IngredientesScreenLoader = new FXMLLoader();
+            IngredientesScreenLoader.setLocation(App.class.getResource(name + ".fxml"));
+            IngredientesScreenLoader.setControllerFactory(DI.injector::getInstance);
+            newLoadedPane = IngredientesScreenLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        mainPane.getChildren().setAll(newLoadedPane);
     }
 }
