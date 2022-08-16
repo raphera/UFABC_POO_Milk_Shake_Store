@@ -9,7 +9,8 @@
             "name": "Launch Main",
             "request": "launch",
             "mainClass": "com.ufabc.poo/com.ufabc.poo.Main",
-            "projectName": "milkshakestore"
+            "projectName": "milkshakestore",
+            "vmArgs": "--add-exports javafx.base/com.sun.javafx.event=org.controlsfx.controls"
         },
         {
             "type": "java",
