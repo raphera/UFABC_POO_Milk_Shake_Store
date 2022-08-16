@@ -22,7 +22,7 @@ jobs:
     - name: Compilar com Maven
       run: mvn -B package --file "milkshakestore/pom.xml"
     - name: Disponibilizar arquivo compilado
-      run: mkdir staging && cp "milkshakestore/target/*.jar" staging
+      run: mkdir staging && cp ./milkshakestore/target/*.jar staging
     - uses: actions/upload-artifact@v3
       with:
         name: Package
