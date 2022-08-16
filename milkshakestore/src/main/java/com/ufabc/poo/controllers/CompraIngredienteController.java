@@ -1,7 +1,15 @@
 package com.ufabc.poo.controllers;
 
+import java.net.URL;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import com.ufabc.poo.domain.Compra;
 import com.ufabc.poo.domain.Ingrediente;
+import com.ufabc.poo.services.interfaces.IEstoque;
+import com.ufabc.poo.services.interfaces.ITranscaoService;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,17 +18,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
-
-import com.ufabc.poo.services.Estoque;
-import com.ufabc.poo.services.interfaces.ITranscaoService;
-import com.ufabc.poo.services.interfaces.IEstoque;
-
-import javax.inject.Inject;
-import java.net.URL;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class CompraIngredienteController implements Initializable {
     private final ITranscaoService transacao;

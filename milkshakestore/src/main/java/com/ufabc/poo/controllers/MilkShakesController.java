@@ -33,14 +33,6 @@ public class MilkShakesController implements Initializable {
     private final ITranscaoService transacao;
     private final IBancoDeMilkShakes milkshakes;
 
-    // Injeta o estoque
-    @Inject
-    public MilkShakesController(IBancoDeMilkShakes milkshakes, ITranscaoService transacao, IEstoque estoque) {
-        this.milkshakes = milkshakes;
-        this.transacao = transacao;
-        this.estoque = estoque;
-    }
-
     @FXML
     private TableView<MilkShake> tbData;
 
@@ -52,6 +44,13 @@ public class MilkShakesController implements Initializable {
 
     @FXML
     private TextField searchField;
+
+    @Inject
+    public MilkShakesController(IBancoDeMilkShakes milkshakes, ITranscaoService transacao, IEstoque estoque) {
+        this.milkshakes = milkshakes;
+        this.transacao = transacao;
+        this.estoque = estoque;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

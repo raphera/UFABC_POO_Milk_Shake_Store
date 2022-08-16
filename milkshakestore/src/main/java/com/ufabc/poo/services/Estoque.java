@@ -18,15 +18,12 @@ public class Estoque implements IEstoque {
     @Inject
     public Estoque(IPersistenceService persistenceService) {
         this.persistenceService = persistenceService;
-        // Carregar dados do json em Ingredientes
         Ingredientes = persistenceService.getEstoque();
     }
 
-    /* Método remove Ingrediente do estoque */
     public void RemoveIng(UUID id_MP) {
         Ingredientes.removeIf(x -> x.getId().equals(id_MP));
 
-        // Remover do json
         persistenceService.setEstoque(Ingredientes);
     }
 
@@ -36,14 +33,9 @@ public class Estoque implements IEstoque {
         Ingredientes.removeIf(x -> x.getId().equals(ingrediente.getId()));
         Ingredientes.add(ingrediente);
 
-        // Remover do json
         persistenceService.setEstoque(Ingredientes);
     }
 
-    /*
-     * Método adiciona matéria prima ao estoque, verifica se já existe alguma
-     * com mesmo nome, se já existir apenas atualiza os dados.
-     */
     public void AdicionaIng(long codigo, String nome, int quantidade, float preco) {
         if (Ingredientes.stream().noneMatch(x -> x.getCodigo() == codigo))
             Ingredientes.add(new Ingrediente(codigo, nome, quantidade, preco));
@@ -56,7 +48,6 @@ public class Estoque implements IEstoque {
         persistenceService.setEstoque(Ingredientes);
     }
 
-    /* Método edita Ingrediente do estoque */
     public void editIng(Ingrediente ingrediente) {
         Ingredientes.removeIf(x -> x.getId().equals(ingrediente.getId()));
         Ingredientes.add(ingrediente);
@@ -64,26 +55,14 @@ public class Estoque implements IEstoque {
         persistenceService.setEstoque(Ingredientes);
     }
 
-    /*
-     * Método retorna Ingrediente de acordo com nome,
-     * caso não encontre retorna nulo.
-     */
     public Ingrediente getIng(String nome) {
         return Ingredientes.stream().filter(x -> x.getNome().equals(nome)).findAny().orElse(null);
     }
 
-    /*
-     * Método retorna Ingrediente de acordo com Id,
-     * caso não encontre retorna nulo.
-     */
     public Ingrediente getIng(UUID Id) {
         return Ingredientes.stream().filter(x -> x.getId().equals(Id)).findAny().orElse(null);
     }
 
-    /*
-     * Método retorna Ingrediente de acordo com o código de barras,
-     * caso não encontre retorna nulo.
-     */
     public Ingrediente getIng(long codigo) {
         return Ingredientes.stream().filter(x -> x.getCodigo() == codigo).findAny().orElse(null);
     }

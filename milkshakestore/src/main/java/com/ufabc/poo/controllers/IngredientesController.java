@@ -1,14 +1,20 @@
 package com.ufabc.poo.controllers;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javax.inject.Inject;
+
 import com.ufabc.poo.App;
 import com.ufabc.poo.domain.Ingrediente;
 import com.ufabc.poo.helpers.DI;
+import com.ufabc.poo.services.interfaces.IBancoDeMilkShakes;
+import com.ufabc.poo.services.interfaces.IEstoque;
+import com.ufabc.poo.services.interfaces.ITranscaoService;
 
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,44 +28,27 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import com.ufabc.poo.services.interfaces.IBancoDeMilkShakes;
-import com.ufabc.poo.services.interfaces.IEstoque;
-import com.ufabc.poo.services.interfaces.ITranscaoService;
-
-import javax.inject.Inject;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 public class IngredientesController implements Initializable {
     private final ITranscaoService transacao;
     private final IEstoque estoque;
-
-    @Inject
-    public IngredientesController(IEstoque estoque, ITranscaoService transacao, IBancoDeMilkShakes receitas) {
-        this.transacao = transacao;
-        this.estoque = estoque;
-    }
 
     @FXML
     TableView<Ingrediente> tbData;
 
     @FXML
-    TableColumn<Ingrediente, String> colCodigo;
-
-    @FXML
-    TableColumn<Ingrediente, String> colNome;
-
-    @FXML
-    TableColumn<Ingrediente, String> colPreco;
-
-    @FXML
-    TableColumn<Ingrediente, String> colQtd;
+    TableColumn<Ingrediente, String> colCodigo, colNome, colPreco, colQtd;
 
     @FXML
     TextField searchField;
 
     @FXML
     Button editBtn, removeBtn;
+
+    @Inject
+    public IngredientesController(IEstoque estoque, ITranscaoService transacao, IBancoDeMilkShakes receitas) {
+        this.transacao = transacao;
+        this.estoque = estoque;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

@@ -1,6 +1,5 @@
 package com.ufabc.poo.services.interfaces;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;

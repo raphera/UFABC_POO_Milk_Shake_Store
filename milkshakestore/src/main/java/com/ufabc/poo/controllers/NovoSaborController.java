@@ -34,7 +34,21 @@ public class NovoSaborController implements Initializable {
     public static ObservableList<NovoIng> IngredientesNovoMilkShake = FXCollections.observableArrayList();
     public static MilkShake selectedMilkShake;
 
-    // Injeta o estoque
+    @FXML
+    private TableView<NovoIng> tbData;
+
+    @FXML
+    public TableColumn<NovoIng, String> colIng, colQtd;
+
+    @FXML
+    public TextField nomeMilkShake, fieldPreco;
+
+    @FXML
+    public Button botaoCriarMilkShake, botaoCancelar;
+
+    @FXML
+    private Label labelSugPrice;
+
     @Inject
     public NovoSaborController(IEstoque estoque, IBancoDeMilkShakes MilkShakes) {
         this.estoque = estoque;
@@ -42,39 +56,16 @@ public class NovoSaborController implements Initializable {
         IngredientesNovoMilkShake.clear();
     }
 
-    @FXML
-    private TableView<NovoIng> tbData;
-
-    @FXML
-    public TableColumn<NovoIng, String> colIng;
-
-    @FXML
-    public TableColumn<NovoIng, String> colQtd;
-
-    @FXML
-    public TextField nomeMilkShake, fieldPreco;
-
-    @FXML
-    public Button botaoCriarMilkShake;
-
-    @FXML
-    public Button botaoCancelar;
-
-    @FXML
-    private Label labelSugPrice;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         // Coluna 1 - Nome do produto
-        colIng.setCellValueFactory(new PropertyValueFactory<>("colIng"));
+        colIng.setCellValueFactory(new PropertyValueFactory<NovoIng, String>("colIng"));
 
         // Coluna 2 - quantidade de produto
-        colQtd.setCellValueFactory(new PropertyValueFactory<>("colQtd"));
+        colQtd.setCellValueFactory(new PropertyValueFactory<NovoIng, String>("colQtd"));
 
         tbData.setItems(IngredientesNovoMilkShake);
-        tbData.getColumns().clear();
-        tbData.getColumns().addAll(colIng, colQtd);
 
         // Adiciona um listener para atualizar o preço sugerido do novo sabor de
         // milkshake
